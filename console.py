@@ -123,7 +123,9 @@ class HBNBCommand(cmd.Cmd):
             args = args.split(' ')
             if args[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
-                return        
+                return
+        
+        new_instance = HBNBCommand.classes[args[0]]()
         #Find the word to create an object and your arguments
         for atributes in args[1:]:
             argument = atributes.split('=')
@@ -137,7 +139,7 @@ class HBNBCommand(cmd.Cmd):
             #Check if it's a float
             else:
                 try:
-                    float(atr[1])
+                    float(argument[1])
                 except ValueError:
                     pass
             #Pass the argument to function new_instance
