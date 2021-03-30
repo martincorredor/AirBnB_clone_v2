@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """ File to create a New engine """
 from models.base_model import BaseModel, Base
-from sqlalchemy import (create_engine)
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session, relationship
+from sqlalchemy import Column, Integer, String, DateTime, MetaData
 import os
 from models.amenity import Amenity
 from models.review import Review
