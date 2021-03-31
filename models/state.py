@@ -14,15 +14,15 @@ class State(BaseModel, Base):
     cities = relationship("City", backref='state',
                             cascade="all, delete, delete-orphan")
 
-if env("HBNB_TYPE_STORAGE") != 'db':
-    @property
-    def cities(self):
-        """
-        Returns the list of City instances with state_id equals to the current State.id
-        """
-        new_list = []
-        instances = FileStorage.all()
-        for key, value in (instances):
-            if value.state_id == State.id:
-                new_list.append(value)
-        return new_list
+    if env("HBNB_TYPE_STORAGE") != 'db':
+        @property
+        def cities(self):
+            """
+            Returns the list of City instances with state_id equals to the current State.id
+            """
+            new_list = []
+            instances = FileStorage.all()
+            for key, value in (instances):
+                if value.state_id == self.id:
+                    new_list.append(value)
+            return new_list
