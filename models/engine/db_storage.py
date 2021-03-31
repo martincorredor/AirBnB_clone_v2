@@ -23,6 +23,7 @@ env = {
     "ENV": os.getenv('HBNB_ENV')
     }
 
+
 class DBStorage:
     """ Class DBStorage engine """
     __engine = None
@@ -41,7 +42,8 @@ class DBStorage:
 
     def all(self, cls=None):
         """
-        Query on the current database session all objects depending of the class name and this method must return a dictionary
+        Query on the current database session all objects depending
+        of the class name and this method must return a dictionary
         """
         Class = ['User', 'State', 'City', 'Amenity', 'Place', 'Review']
         obj_dict = {}
