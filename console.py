@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Console Module """
+
 import cmd
 import sys
 from models.base_model import BaseModel
@@ -10,6 +11,8 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from os import getenv
+from sqlalchemy.orm import relationship
 
 
 class HBNBCommand(cmd.Cmd):
@@ -118,14 +121,12 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        
+
         else:
             args = args.split(' ')
             if args[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-        
-        new_instance = HBNBCommand.classes[args[0]]()
         #Find the word to create an object and your arguments
         for atributes in args[1:]:
             argument = atributes.split('=')
@@ -159,7 +160,7 @@ class HBNBCommand(cmd.Cmd):
         c_name = new[0]
         c_id = new[2]
 
-        # guard against trailing args
+        # Guard against trailing args
         if c_id and ' ' in c_id:
             c_id = c_id.partition(' ')[0]
 
