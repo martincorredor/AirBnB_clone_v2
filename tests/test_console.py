@@ -1,34 +1,67 @@
 #!/usr/bin/python3
-"""This module tests console.py file.
-Usage:
-    To be used with the unittest module:
-    "python3 -m unittest discover tests" command or
-    "python3 -m unittest tests/test_console.py"
-"""
-from models.engine.file_storage import FileStorage as Storage
-from unittest.mock import create_autospec, patch
-from console import HBNBCommand
-from io import StringIO
-import unittest
-import pep8
-import sys
+"""Unittest for console"""
+import cmd
 import os
+import pep8
+import unittest
+import models
+from unittest.mock import patch
+from io import StringIO
+from console import HBNBCommand
+import json
 
-classes = ["BaseModel", "User", "State", "City", "Amenity", "Place", "Review"]
-Storage = Storage()
+run = os.system
 
 
-class TestConsole(unittest.TestCase):
-    ''' TestCase class for storing the unittests of the console. '''
+class TestHBNBCommand(unittest.TestCase):
+    """
+    testing all commands
+    """
+    def test_docstring(self):
+        """docstring"""
+        self.assertIsNotNone(HBNBCommand.__doc__)
+        self.assertIsNotNone(HBNBCommand.emptyline.__doc__)
+        self.assertIsNotNone(HBNBCommand.do_quit.__doc__)
+        self.assertIsNotNone(HBNBCommand.do_EOF.__doc__)
+        self.assertIsNotNone(HBNBCommand.do_create.__doc__)
+        self.assertIsNotNone(HBNBCommand.do_show.__doc__)
+        self.assertIsNotNone(HBNBCommand.do_destroy.__doc__)
+        self.assertIsNotNone(HBNBCommand.do_all.__doc__)
+        self.assertIsNotNone(HBNBCommand.do_update.__doc__)
 
-    def test_create_00(self):
-        ''' Tests for the create command. '''
-        # Create console session.
-        cons = self.create_session()
+    def test_pep8(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(['console.py'])
+        self.assertEqual(result.total_errors, 0)
 
-        # Test "create {} name='California'".
-        with patch('sys.stdout', new=StringIO()) as Output:
-            cons.onecmd('create State name=\"California\"')
-            create_stdout = Output.getvalue().strip()
-            create_stdout = 'State.{}'.format(create_stdout)
-            self.assertTrue(create_stdout in Storage.all())
+    def test_aa_create(self):
+        """ create tests """
+        no_stdout = " > /dev/null 2>&1"
+        run("rm file.json " + no_stdout)
+        run("echo 'create State' | ./console.py" + no_stdout)
+        run("echo 'all' | ./console.py" + no_stdout)
+        with open("file.json", 'r') as f:
+            temp = json.load(f)
+        self.assertTrue(temp)
+
+    def test_ab_create(self):
+        """ create tests """
+        no_stdout = " > /dev/null 2>&1"
+        run("rm file.json " + no_stdout)
+        run('echo create State name="California" | ./console.py' + no_stdout)
+        run("echo 'all' | ./console.py" + no_stdout)
+        with open("file.json", 'r') as f:
+            temp = json.load(f)
+        self.assertTrue(temp)
+
+    def test_ac_create(self):
+        """ create tests """
+        no_stdout = " > /dev/null 2>&1"
+        run("rm file.json " + no_stdout)
+        command = 'echo create City state_id="1" name="San_Francisco" '
+        command = command + '| ./console.py '
+        run(command + no_stdout)
+        run("echo 'all' | ./console.py" + no_stdout)
+        with open("file.json", 'r') as f:
+            temp = json.load(f)
+        self.assertTrue(temp)
