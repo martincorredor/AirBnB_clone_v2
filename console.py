@@ -13,6 +13,7 @@ from models.amenity import Amenity
 from models.review import Review
 from os import getenv
 from sqlalchemy.orm import relationship
+from models.engine import FileStorage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -127,6 +128,7 @@ class HBNBCommand(cmd.Cmd):
             if args[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
+        new_instance = HBNBCommand.classes[args[0]]()
         #Find the word to create an object and your arguments
         for atributes in args[1:]:
             argument = atributes.split('=')
@@ -229,11 +231,13 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            dict_all = storage.all(HBNBCommand.classes[args])
+            for k, v in dict_all.items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage._FileStorage__objects.items():
+            dict_all = storage.all()
+            for k, v in dict_all.items():
                 print_list.append(str(v))
 
         print(print_list)
