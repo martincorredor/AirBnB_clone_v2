@@ -9,20 +9,19 @@ from os import getenv as env
 
 class State(BaseModel, Base):
     """ State class """
-    __tablename__ = "states"
-    name = Column(String(128), nullable=False)
-    cities = relationship("City", backref='state',
-                            cascade="all, delete, delete-orphan")
+    __tablename__ = 'states'
 
-    if env("HBNB_TYPE_STORAGE") != 'db':
+    if getenv("HBNB_TYPE_STORAGE") == "db":
+        name = Column(String(128), nullable=False)
+        cities = relationship('City', backref='state', cascade='all,delete')
+
+    else:
         @property
         def cities(self):
+            """Getter for cities using FileStorage
             """
-            Returns the list of City instances with state_id equals to the current State.id
-            """
-            new_list = []
-            instances = FileStorage.all()
-            for key, value in (instances):
+            list_c = []
+            for key, value in storage.all(City).items():
                 if value.state_id == self.id:
-                    new_list.append(value)
-            return new_list
+                    list_c = list_c.append[value]
+            return list_c

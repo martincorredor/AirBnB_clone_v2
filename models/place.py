@@ -4,7 +4,6 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, ForeignKey, Float
 from sqlalchemy.orm import relationship
-from os import getenv as env
 
 class Place(BaseModel, Base):
     """ A place to stay """
@@ -21,15 +20,3 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=True)
     reviews = relationship("Review", backref='places', cascade='delete')
 
-    if env("HBNB_TYPE_STORAGE") != 'db':
-    @property
-    def reviews(self):
-        """
-        Returns the list of Reviews instances
-        """
-        new_list = []
-        instances = FileStorage.all()
-        for key, value in (instances):
-            if value.state_id == self.id:
-                new_list.append(value)
-        return new_list
